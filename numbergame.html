@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #game-container {
+            display: inline-block;
+            padding: 20px;
+            border: 2px solid #000;
+            background-color: rgba(32, 5, 43, 0.2);
+            border-radius: 10px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+        /*Number input styling */
+        #guess, #hint {
+            padding: 10px;
+            font-size: 1.2em;
+            color: white;
+        }
+
+    </style>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <h1>Number Game</h1>
+        <p>Guess a number between 1 and 20!</p>
+        <input type="number" id="guess" min="1" max="20">
+        <button onclick="checkGuess()">Submit</button>
+        <div>Guess Count:</div><div id="guesses"></div>
+        <div id="result"></div>
+        <div id="hint"></div>
+        <button onclick="randomNumber = setNewGame()">New Game</button>
+    </div>
+
+    <script>
+
+        let guessTally = 0;
+        let guessArr = [];
+        const setNewGame = () => {
+            
+            const randomNumber = Math.floor(Math.random() * 20) + 1;
+            const result = document.getElementById('result');
+            
+            guessTally = 0;
+            guessArr = [];
+            result.innerHTML = "";
+            return randomNumber;
+        }
+        let randomNumber = Math.floor(Math.random() * 20) + 1;
+        const result = document.getElementById('result');
+        const hint = document.getElementById('hint');
+
+        // Submit button function
+        const checkGuess = () => {
+            // Get user input
+            const guessInput = document.getElementById('guess');
+            const guess = parseInt(guessInput.value);
+            const guesses = document.getElementById('guesses');
+
+            // Log number of guesses and store guesses in an array
+            guessTally += 1;
+            guessArr.push(guess);
+            // Display guess tally
+            guesses.innerHTML = guessTally;
+            
+            playGame(randomNumber, guess);
+        }
+
+        const playGame = (randomNumber, guess) => {
+            if (guess === randomNumber) {
+                if (guessArr.length === 1) {
+                    return result.innerHTML = `Incredible! You guessed the number ${guess} on your first try!`;
+                }
+                return result.innerHTML = `Correct Guess of ${guess}`;
+                setNewGame();
+            }
+            if (guess < randomNumber && guessArr.length >= 3) {
+                return hint.innerHTML = `Hint: Try a higher number than ${guess}!`;
+            } else if (guess > randomNumber && guessArr.length >= 3) {
+                return hint.innerHTML = `Hint: Try a lower number than ${guess}!`;
+            } else {
+                hint.innerHTML = "";
+            }
+            return  (hint.innerHTML = "") , (result.innerHTML = `Incorrect guess, number isn't ${guess}`);
+
+        }
+
+    </script>
+</html>
