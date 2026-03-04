@@ -67,7 +67,17 @@
             const guessInput = document.getElementById('guess');
             const guess = parseInt(guessInput.value);
             const guesses = document.getElementById('guesses');
-
+            
+            if (isNaN(guess)) {
+                result.innerHTML = "Please enter a valid number";
+                guessInput.value = "";
+                return;
+            }
+            if (guessArr.includes(guess)) {
+                result.innerHTML = `You already guessed ${guess}! Try a different number`;
+                guessInput.value = "";
+                return;
+            }
             // Log number of guesses and store guesses in an array
             guessTally += 1;
             guessArr.push(guess);
@@ -78,13 +88,14 @@
         }
 
         const playGame = (randomNumber, guess) => {
+
+            //Compare guess to random number and update result element with message
             if (guess === randomNumber) {
-                if (guessArr.length === 1) {
-                    return result.innerHTML = `Incredible! You guessed the number ${guess} on your first try!`;
-                }
                 return result.innerHTML = `Correct Guess of ${guess}`;
                 setNewGame();
             }
+
+            // Provide hints after 3 guesses
             if (guess < randomNumber && guessArr.length >= 3) {
                 return hint.innerHTML = `Hint: Try a higher number than ${guess}!`;
             } else if (guess > randomNumber && guessArr.length >= 3) {
@@ -92,6 +103,7 @@
             } else {
                 hint.innerHTML = "";
             }
+
             return  (hint.innerHTML = "") , (result.innerHTML = `Incorrect guess, number isn't ${guess}`);
 
         }
